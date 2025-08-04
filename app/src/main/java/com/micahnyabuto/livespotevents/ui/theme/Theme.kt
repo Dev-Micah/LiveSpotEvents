@@ -53,7 +53,7 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 @Composable
-fun KienyejiDietTheme(
+fun LiveSpotEventsTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     //theme: Int = Theme.FOLLOW_SYSTEM.themeValue,
     dynamicColor: Boolean = false,
