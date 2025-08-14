@@ -21,7 +21,7 @@ enum class BottomNavigationItem(
         selectedIcon = Icons.Filled.Home,
         unselectedIcon = Icons.Outlined.Home,
         label = "Home",
-        route = "events"
+        route = "home"
     ),
     EXPLORE(
         selectedIcon = Icons.Filled.Explore,
