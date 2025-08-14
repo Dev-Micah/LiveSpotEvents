@@ -11,6 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.micahnyabuto.livespotevents.core.navigation.MainGraph
 import com.micahnyabuto.livespotevents.features.create.CreateEventScreen
 import com.micahnyabuto.livespotevents.ui.theme.LiveSpotEventsTheme
 
@@ -20,7 +22,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             LiveSpotEventsTheme {
-                CreateEventScreen()
+                val navController = rememberNavController()
+                MainGraph(navController)
 
             }
         }
