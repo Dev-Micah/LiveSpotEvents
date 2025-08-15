@@ -140,10 +140,3 @@ fun CreateEventScreen() {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CreateEventScreenPreview() {
-    MaterialTheme {
-        CreateEventScreen()
-    }
-}
