@@ -1,19 +1,23 @@
 package com.micahnyabuto.livespotevents.features.viewmodel
 
-import android.annotation.SuppressLint
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.micahnyabuto.livespotevents.core.data.DummyEventsRepository
 import com.micahnyabuto.livespotevents.core.model.Event
-import com.micahnyabuto.livespotevents.core.model.loadEventsFromAssets
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
-class DummyEventViewModel(private val eventRepository: EventRepository) : ViewModel() {
-    private val _events = MutableLiveData<List<Event>>()
-    val events: LiveData<List<Event>> = _events
+class DummyEventViewModel(private val repository: DummyEventsRepository) : ViewModel() {
+    private val _events = MutableStateFlow<List<Event>>(emptyList())
+    val events: StateFlow<List<Event>> = _events
 
-    fun loadEvents(context: Context) {
-        val loadedEvents = eventRepository.loadEventsFromAssets(context)
-        _events.value = loadedEvents
+    fun fetchEvents() {
+        viewModelScope.launch {
+            val loadedEvents = repository.loadEvents()
+            _events.value = loadedEvents
+        }
     }
 }
