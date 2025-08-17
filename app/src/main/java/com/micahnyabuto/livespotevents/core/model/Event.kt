@@ -14,8 +14,3 @@ data class Event(
     val imageName: String
 )
 
-fun loadEventsFromAssets(context: Context): List<Event> {
-    val jsonString = context.assets.open("events.json").bufferedReader().use { it.readText() }
-    val listType = object : TypeToken<List<Event>>() {}.type
-    return Gson().fromJson(jsonString, listType)
-}
