@@ -1,47 +1,56 @@
 package com.micahnyabuto.livespotevents.core.permissions
 
 import android.Manifest
+import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 
 @Composable
-fun RememberImagePickerPermission(
-    onPermissionGranted: () -> Unit,
+fun rememberImagePicker(
+    onImagePicked: (Uri?) -> Unit,
     onPermissionDenied: () -> Unit
-) {
+): () -> Unit {
     val context = LocalContext.current
 
-    // Determine the right permission based on Android version
     val imagePermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         Manifest.permission.READ_MEDIA_IMAGES
     } else {
         Manifest.permission.READ_EXTERNAL_STORAGE
     }
 
-    // Launcher to request permission
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) onPermissionGranted() else onPermissionDenied()
-    }
+    // Gallery launcher
+    val galleryLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = { uri -> onImagePicked(uri) }
+    )
 
-    // Function to check and request permission
-    fun requestPermission() {
-        val permissionStatus = ContextCompat.checkSelfPermission(context, imagePermission)
-        if (permissionStatus == PermissionChecker.PERMISSION_GRANTED) {
-            onPermissionGranted()
-        } else {
-            launcher.launch(imagePermission)
+    // Permission launcher
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission(),
+        onResult = { granted ->
+            if (granted) {
+                galleryLauncher.launch("image/*")
+            } else {
+                onPermissionDenied()
+            }
         }
-    }
+    )
 
-    // Return the function so caller can trigger it
-    LaunchedEffect(Unit) {
-        requestPermission()
+    // Return a lambda you can call in your button
+    return remember {
+        {
+            val status = ContextCompat.checkSelfPermission(context, imagePermission)
+            if (status == PermissionChecker.PERMISSION_GRANTED) {
+                galleryLauncher.launch("image/*")
+            } else {
+                permissionLauncher.launch(imagePermission)
+            }
+        }
     }
 }
