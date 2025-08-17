@@ -83,4 +83,10 @@ dependencies {
     //gson
     implementation("com.google.code.gson:gson:2.13.1")
 
+    //Koin
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+    testImplementation(libs.koin.test)
+
 }
