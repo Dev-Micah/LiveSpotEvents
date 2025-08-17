@@ -55,9 +55,8 @@ fun ExploreScreen() {
         Event("Club World Cup Opening", R.drawable.cwc)
     )
 
-    Scaffold(
-        containerColor = Color(0xFF21182B), // surfaceDark
-    ) { innerPadding ->
+    Scaffold{
+        innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -81,11 +80,6 @@ fun ExploreScreen() {
                     }
                 },
                 singleLine = true,
-//                colors = OutlinedTextFieldDefaults.colors(
-//                    containerColor = Color(0xFF332A3B), // A slightly lighter dark color for the text field
-//                    unfocusedBorderColor = Color.Transparent,
-//                    focusedBorderColor = Color.Transparent
-//                ),
                 shape = RoundedCornerShape(12.dp)
             )
 
@@ -129,11 +123,6 @@ fun FilterChip(filter: Filter, onClick: () -> Unit) {
                 modifier = Modifier.size(AssistChipDefaults.IconSize)
             )
         },
-        colors = AssistChipDefaults.assistChipColors(
-            containerColor = Color(0xFF332A3B), // Same as search bar background
-            labelColor = Color.White,
-            leadingIconContentColor = Color.White
-        )
     )
 }
 
@@ -158,9 +147,6 @@ fun EventCard(event: Event) {
                     .fillMaxWidth()
                     .height(60.dp)
                     .align(Alignment.BottomCenter)
-                    .background(
-                        brush = SolidColor(MaterialTheme.colorScheme.background)
-                    )
             )
             Text(
                 text = event.title,
