@@ -1,18 +1,44 @@
 package com.micahnyabuto.livespotevents.features.create
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.tooling.preview.Preview
+import coil.compose.rememberAsyncImagePainter
+import com.micahnyabuto.livespotevents.core.permissions.rememberImagePicker
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -22,6 +48,15 @@ fun CreateEventScreen() {
     val eventTime = remember { mutableStateOf("") }
     val eventLocation = remember { mutableStateOf("") }
     val eventDescription = remember { mutableStateOf("") }
+
+    var selectedImage by remember { mutableStateOf<android.net.Uri?>(null) }
+
+    val pickImage = rememberImagePicker(
+        onImagePicked = { uri -> selectedImage = uri },
+        onPermissionDenied = { /* Show snackbar or toast */ }
+    )
+
+
 
     Scaffold(
         topBar = {
@@ -42,6 +77,7 @@ fun CreateEventScreen() {
             )
         }
     ) { innerPadding ->
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -117,11 +153,28 @@ fun CreateEventScreen() {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
                 ) {
-                    Text("Upload Image", fontWeight = FontWeight.Bold, fontSize = 18.sp, color = Color.Gray)
-                    Text("Add an image to your event", fontSize = 14.sp, color = Color.Gray)
-                    Spacer(modifier = Modifier.height(16.dp))
-                    OutlinedButton(onClick = { /* Upload */ }, shape = RoundedCornerShape(20.dp)) {
-                        Text("Upload")
+                    if (selectedImage != null) {
+                        Image(
+                            painter = rememberAsyncImagePainter(selectedImage),
+                            contentDescription = "Selected Event Image",
+                            modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(12.dp)),
+                            contentScale = ContentScale.Crop
+                        )
+                    }else{
+                        Text(
+                            "Upload Image",
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp,
+                            color = Color.Gray
+                        )
+                        Text("Add an image to your event", fontSize = 14.sp, color = Color.Gray)
+                        Spacer(modifier = Modifier.height(16.dp))
+                        OutlinedButton(
+                            onClick = { pickImage() },
+                            shape = RoundedCornerShape(20.dp)
+                        ) {
+                            Text("Upload")
+                        }
                     }
                 }
 
