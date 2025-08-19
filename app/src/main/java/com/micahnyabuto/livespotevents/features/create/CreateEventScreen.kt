@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.micahnyabuto.livespotevents.core.permissions.rememberImagePicker
@@ -140,7 +141,7 @@ fun CreateEventScreen() {
                         .padding(vertical = 8.dp),
                     shape = RoundedCornerShape(12.dp),
                     minLines = 5,
-                    maxLines = 10,
+                    maxLines = 10
                 )
 
                 Column(
@@ -191,5 +192,11 @@ fun CreateEventScreen() {
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun CreateEventScreenPreview() {
+    CreateEventScreen()
 }
 

@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.micahnyabuto.livespotevents" />
+                  <option name="mobileSdkAppId" value="1:225330013784:android:09c3e7e2e5be316117cc2d" />
+                  <option name="projectId" value="livespot-events" />
+                  <option name="projectNumber" value="225330013784" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
