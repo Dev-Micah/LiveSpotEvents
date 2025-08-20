@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    kotlin("plugin.serialization") version "1.9.0"
+
 }
 
 android {
@@ -51,9 +53,6 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.ui.graphics)
     implementation(libs.androidx.runtime.livedata)
-    implementation(libs.firebase.database)
-    implementation(libs.firebase.firestore)
-    implementation(libs.firebase.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -91,5 +90,12 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     testImplementation(libs.koin.test)
+
+    //Supabase
+    implementation(platform("io.github.jan-tennert.supabase:bom:3.2.2"))
+    implementation("io.github.jan-tennert.supabase:gotrue-kt:2.6.1") // Auth
+    implementation("io.github.jan-tennert.supabase:postgrest-kt:3.2.2") // Database
+    implementation("io.github.jan-tennert.supabase:storage-kt:3.2.2")
+    implementation("io.ktor:ktor-client-android:3.0.0-rc-1")
 
 }
