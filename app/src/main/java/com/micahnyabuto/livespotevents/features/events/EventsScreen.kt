@@ -5,14 +5,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -26,6 +22,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,19 +37,23 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.micahnyabuto.livespotevents.core.model.Event
-import com.micahnyabuto.livespotevents.features.viewmodel.DummyEventViewModel
+import com.micahnyabuto.livespotevents.core.data.supabase.Event
+import com.micahnyabuto.livespotevents.features.create.EventsViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EventsScreen(
-    eventViewModel: DummyEventViewModel = koinViewModel()
+    eventViewModel: EventsViewModel = koinViewModel()
 ) {
 
     var selectedFilter by remember { mutableStateOf("All") }
     val filters = listOf("All", "Today", "Tomorrow")
     val events by eventViewModel.events.collectAsState()
+
+    LaunchedEffect(Unit) {
+        eventViewModel.loadEvents()
+    }
 
     Scaffold(
             topBar = {
@@ -108,7 +109,7 @@ fun EventCard(event: Event) {
             .clickable { /* Navigate to details */ }
     ) {
         AsyncImage(
-            model = event.imageName,
+            model = event.image_url,
             contentDescription = event.title,
             modifier = Modifier
                 .size(80.dp)
@@ -124,7 +125,7 @@ fun EventCard(event: Event) {
                 .align(Alignment.CenterVertically)
         ) {
             Text(
-                text = if (event.date == "2025-08-15") "Tonight" else "Tomorrow",
+                text = if (event.event_date == "2025-08-15") "Tonight" else "Tomorrow",
                 fontSize = 12.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -136,7 +137,7 @@ fun EventCard(event: Event) {
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = "${event.location}, ${event.time}",
+                text = "${event.location}, ${event.event_time}",
                 fontSize = 14.sp,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
