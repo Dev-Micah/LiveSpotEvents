@@ -7,7 +7,9 @@ import org.koin.dsl.module
 
 val appModule = module {
     single {
-        EventsRepository(get())
+        EventsRepository(
+            client = get()
+        )
     }
 
     viewModel {
