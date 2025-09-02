@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.ui.graphics)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.room.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -93,9 +94,17 @@ dependencies {
 
     //Supabase
     implementation(platform("io.github.jan-tennert.supabase:bom:3.2.2"))
-    implementation("io.github.jan-tennert.supabase:gotrue-kt:2.6.1") // Auth
-    implementation("io.github.jan-tennert.supabase:postgrest-kt:3.2.2") // Database
-    implementation("io.github.jan-tennert.supabase:storage-kt:3.2.2")
-    implementation("io.ktor:ktor-client-android:3.0.0-rc-1")
+    implementation("io.github.jan-tennert.supabase:auth-kt") // Auth (renamed from gotrue-kt in 3.0+)
+    implementation("io.github.jan-tennert.supabase:postgrest-kt") // Database
+    implementation("io.github.jan-tennert.supabase:storage-kt") // Storage
+    implementation("io.github.jan-tennert.supabase:compose-auth") // Compose Auth
+
+    // Ktor Client (compatible with Supabase 3.2.2)
+    val ktor_version = "3.2.2"
+    implementation("io.ktor:ktor-client-android:$ktor_version")
+    implementation("io.ktor:ktor-client-core:$ktor_version")
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    implementation("io.ktor:ktor-client-logging:$ktor_version")
 
 }
