@@ -1,6 +1,8 @@
 package com.micahnyabuto.livespotevents.features.create
 
+import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.micahnyabuto.livespotevents.core.data.supabase.Event
@@ -18,14 +20,19 @@ class EventsViewModel(private val repository: EventsRepository) : ViewModel() {
     fun loadEvents() {
         viewModelScope.launch {
             try {
-                _events.value = repository.getEvents()
+                Log.d("EventsViewModel", "Loading events...")
+                val eventsList = repository.getEvents()
+                Log.d("EventsViewModel", "Loaded ${eventsList.size} events: $eventsList")
+                _events.value = eventsList
             } catch (e: Exception) {
+                Log.e("EventsViewModel", "Error loading events", e)
                 e.printStackTrace()
             }
         }
     }
 
     fun createEvent(
+        context: Context,
         title: String,
         date: String,
         time: String,
@@ -37,7 +44,7 @@ class EventsViewModel(private val repository: EventsRepository) : ViewModel() {
     ) {
         viewModelScope.launch {
             try {
-                val imageUrl = imageUri?.let { repository.uploadEventImage(it) }
+                val imageUrl = imageUri?.let { repository.uploadEventImage(context, it) }
                 val event = Event(
                     title = title,
                     event_date = date,
@@ -47,6 +54,8 @@ class EventsViewModel(private val repository: EventsRepository) : ViewModel() {
                     image_url = imageUrl
                 )
                 repository.createEvent(event)
+                // Refresh the events list after successful creation
+                loadEvents()
                 onSuccess()
             } catch (e: Exception) {
                 onError(e)
@@ -56,3 +65,5 @@ class EventsViewModel(private val repository: EventsRepository) : ViewModel() {
 
 
 }
+
+
