@@ -39,6 +39,8 @@ fun MainGraph(
     val currentRoute = navBackStackEntry?.destination?.route.orEmpty()
     val showBottomNavigation = currentRoute !in  listOf(
         Destinations.Splash.route,
+        Destinations.Login.route,
+        Destinations.Create.route,
 
     )
     Scaffold (
@@ -99,7 +101,9 @@ fun MainGraph(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Destinations.Home.route) {
-                EventsScreen()
+                EventsScreen(
+                    navController = navController,
+                )
             }
             composable(Destinations.Explore.route) {
                 ExploreScreen()
