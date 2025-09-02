@@ -28,22 +28,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.micahnyabuto.livespotevents.core.permissions.rememberImagePicker
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateEventScreen() {
+fun CreateEventScreen(
+    eventsViewModel: EventsViewModel=koinViewModel()
+) {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    var imageUri by remember { mutableStateOf<android.net.Uri?>(null) }
     val eventTitle = remember { mutableStateOf("") }
     val eventDate = remember { mutableStateOf("") }
     val eventTime = remember { mutableStateOf("") }
@@ -51,6 +59,7 @@ fun CreateEventScreen() {
     val eventDescription = remember { mutableStateOf("") }
 
     var selectedImage by remember { mutableStateOf<android.net.Uri?>(null) }
+    var isLoading by remember { mutableStateOf(false) }
 
     val pickImage = rememberImagePicker(
         onImagePicked = { uri -> selectedImage = uri },
@@ -158,7 +167,9 @@ fun CreateEventScreen() {
                         Image(
                             painter = rememberAsyncImagePainter(selectedImage),
                             contentDescription = "Selected Event Image",
-                            modifier = Modifier.fillMaxSize().clip(RoundedCornerShape(12.dp)),
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(12.dp)),
                             contentScale = ContentScale.Crop
                         )
                     }else{
@@ -180,14 +191,45 @@ fun CreateEventScreen() {
                 }
 
                 Button(
-                    onClick = { /* Create event */ },
+                    onClick = {
+                        isLoading = true
+                        eventsViewModel.createEvent(
+                            context = context,
+                            title = eventTitle.value,
+                            date = eventDate.value,
+                            time = eventTime.value,
+                            location = eventLocation.value,
+                            description = eventDescription.value,
+                            imageUri = selectedImage,
+                            onSuccess = {
+                                isLoading = false
+                                // Clear form after successful creation
+                                eventTitle.value = ""
+                                eventDate.value = ""
+                                eventTime.value = ""
+                                eventLocation.value = ""
+                                eventDescription.value = ""
+                                selectedImage = null
+                                // TODO: Show success message or navigate back
+                            },
+                            onError = { error ->
+                                isLoading = false
+                                // TODO: Show error message
+                                error.printStackTrace()
+                            }
+                        )
+                    },
+                    enabled = !isLoading,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(56.dp)
                         .padding(vertical = 8.dp),
                     shape = RoundedCornerShape(12.dp),
                 ) {
-                    Text("Create Event", fontSize = 16.sp)
+                    Text(
+                        text = if (isLoading) "Creating Event..." else "Create Event",
+                        fontSize = 16.sp
+                    )
                 }
             }
         }
