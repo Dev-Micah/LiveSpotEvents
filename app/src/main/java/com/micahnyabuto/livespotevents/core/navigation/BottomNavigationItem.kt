@@ -29,12 +29,12 @@ enum class BottomNavigationItem(
         label = "Explore",
         route = "explore"
     ),
-    CREATE(
-        selectedIcon = Icons.Filled.AddBox,
-        unselectedIcon = Icons.Outlined.AddBox,
-        label = "Create",
-        route = "create"
-    ),
+//    CREATE(
+//        selectedIcon = Icons.Filled.AddBox,
+//        unselectedIcon = Icons.Outlined.AddBox,
+//        label = "Create",
+//        route = "create"
+//    ),
     PROFILE(
         selectedIcon = Icons.Filled.Person,
         unselectedIcon = Icons.Outlined.Person,
