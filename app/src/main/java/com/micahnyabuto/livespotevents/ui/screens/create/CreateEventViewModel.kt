@@ -1,12 +1,12 @@
-package com.micahnyabuto.livespotevents.features.create
+package com.micahnyabuto.livespotevents.ui.screens.create
 
 import android.content.Context
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.micahnyabuto.livespotevents.core.data.supabase.Event
-import com.micahnyabuto.livespotevents.core.domain.EventsRepository
+import com.micahnyabuto.livespotevents.data.supabase.Event
+import com.micahnyabuto.livespotevents.domain.EventsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

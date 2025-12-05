@@ -1,4 +1,4 @@
-package com.micahnyabuto.livespotevents.core.navigation
+package com.micahnyabuto.livespotevents.ui.navigation
 
 sealed class Destinations(val route: String) {
     object Home : Destinations("home")

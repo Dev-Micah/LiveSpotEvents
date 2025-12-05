@@ -1,2 +1,2 @@
-package com.micahnyabuto.livespotevents.core.navigation
+package com.micahnyabuto.livespotevents.ui.navigation
 

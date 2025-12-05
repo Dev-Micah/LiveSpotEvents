@@ -94,10 +94,10 @@ dependencies {
 
     //Supabase
     implementation(platform("io.github.jan-tennert.supabase:bom:3.2.2"))
-    implementation("io.github.jan-tennert.supabase:auth-kt") // Auth (renamed from gotrue-kt in 3.0+)
-    implementation("io.github.jan-tennert.supabase:postgrest-kt") // Database
-    implementation("io.github.jan-tennert.supabase:storage-kt") // Storage
-    implementation("io.github.jan-tennert.supabase:compose-auth") // Compose Auth
+    implementation("io.github.jan-tennert.supabase:auth-kt")
+    implementation("io.github.jan-tennert.supabase:postgrest-kt")
+    implementation("io.github.jan-tennert.supabase:storage-kt")
+    implementation("io.github.jan-tennert.supabase:compose-auth")
 
     // Ktor Client (compatible with Supabase 3.2.2)
     val ktor_version = "3.2.2"

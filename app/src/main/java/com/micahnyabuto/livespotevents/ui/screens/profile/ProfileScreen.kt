@@ -1,4 +1,4 @@
-package com.micahnyabuto.livespotevents.features.profile
+package com.micahnyabuto.livespotevents.ui.screens.profile
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

@@ -1,10 +1,10 @@
-package com.micahnyabuto.livespotevents.core.domain
+package com.micahnyabuto.livespotevents.domain
 
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import com.micahnyabuto.livespotevents.core.data.supabase.Event
-import com.micahnyabuto.livespotevents.core.data.supabase.SupabaseClientInstance
+import com.micahnyabuto.livespotevents.data.supabase.Event
+import com.micahnyabuto.livespotevents.data.supabase.SupabaseClientInstance
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.storage.storage
 import io.ktor.http.*
@@ -28,14 +28,12 @@ class EventsRepository(
         return try {
             val file = File(context.cacheDir, "event_${System.currentTimeMillis()}.jpg")
 
-            // Copy Uri → File
             context.contentResolver.openInputStream(imageUri)?.use { input ->
                 file.outputStream().use { output ->
                     input.copyTo(output)
                 }
             }
 
-            // Upload to bucket
             val bucket = client.client.storage["event-images"]
             val filePath = "${System.currentTimeMillis()}.jpg"
 
@@ -50,7 +48,7 @@ class EventsRepository(
 
             val publicUrl = bucket.publicUrl(filePath)
 
-            file.delete() // clean up
+            file.delete()
 
             publicUrl
         } catch (e: Exception) {

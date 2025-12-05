@@ -1,4 +1,4 @@
-package com.micahnyabuto.livespotevents.core.navigation
+package com.micahnyabuto.livespotevents.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddBox

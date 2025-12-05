@@ -1,7 +1,6 @@
-package com.micahnyabuto.livespotevents.features.explore
+package com.micahnyabuto.livespotevents.ui.screens.explore
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -21,7 +20,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -30,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.micahnyabuto.livespotevents.R
 
-// Data classes for events and filters
+//Dummy data to be removed
 data class Event(val title: String, val imageResId: Int)
 
 data class Filter(val name: String, val icon: ImageVector)
@@ -38,17 +36,14 @@ data class Filter(val name: String, val icon: ImageVector)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExploreScreen() {
-    // State for the search bar text
     val searchText = remember { mutableStateOf("") }
 
-    // Dummy data for filters and events
     val filters = listOf(
         Filter("Music", Icons.Default.MusicNote),
         Filter("Sports", Icons.Default.SportsBaseball),
         Filter("Theater", Icons.Default.TheaterComedy)
     )
 
-    // Dummy data for events. You would replace this with actual data.
     val events = listOf(
         Event("London is blue Festival", R.drawable.lights),
         Event("Friday Worship Night", R.drawable.crusade),
@@ -83,7 +78,6 @@ fun ExploreScreen() {
                 shape = RoundedCornerShape(12.dp)
             )
 
-            // Filters
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 modifier = Modifier.padding(bottom = 16.dp)
@@ -96,7 +90,6 @@ fun ExploreScreen() {
                 }
             }
 
-            // Events Grid
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -141,7 +134,6 @@ fun EventCard(event: Event) {
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop
             )
-            // Gradient overlay at the bottom of the card for text readability
             Box(
                 modifier = Modifier
                     .fillMaxWidth()

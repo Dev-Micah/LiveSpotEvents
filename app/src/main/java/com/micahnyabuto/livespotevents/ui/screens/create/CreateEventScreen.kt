@@ -1,5 +1,6 @@
-package com.micahnyabuto.livespotevents.features.create
+package com.micahnyabuto.livespotevents.ui.screens.create
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -51,14 +52,14 @@ fun CreateEventScreen(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    var imageUri by remember { mutableStateOf<android.net.Uri?>(null) }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
     val eventTitle = remember { mutableStateOf("") }
     val eventDate = remember { mutableStateOf("") }
     val eventTime = remember { mutableStateOf("") }
     val eventLocation = remember { mutableStateOf("") }
     val eventDescription = remember { mutableStateOf("") }
 
-    var selectedImage by remember { mutableStateOf<android.net.Uri?>(null) }
+    var selectedImage by remember { mutableStateOf<Uri?>(null) }
     var isLoading by remember { mutableStateOf(false) }
 
     val pickImage = rememberImagePicker(

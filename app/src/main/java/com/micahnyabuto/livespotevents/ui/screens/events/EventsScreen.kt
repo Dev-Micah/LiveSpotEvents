@@ -1,8 +1,9 @@
-package com.micahnyabuto.livespotevents.features.events
+package com.micahnyabuto.livespotevents.ui.screens.events
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -44,8 +45,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.micahnyabuto.livespotevents.core.data.supabase.Event
-import com.micahnyabuto.livespotevents.core.navigation.Destinations
+import com.micahnyabuto.livespotevents.data.supabase.Event
+import com.micahnyabuto.livespotevents.ui.navigation.Destinations
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -98,7 +99,6 @@ fun EventsScreen(
             Column(
                 modifier = Modifier.fillMaxSize()
             ) {
-                // Filter chips
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
@@ -112,7 +112,6 @@ fun EventsScreen(
                     }
                 }
 
-                // Events list
                 when {
                     isLoading -> {
                         Column(
@@ -149,7 +148,7 @@ fun EventsScreen(
                         LazyColumn(
                             modifier = Modifier.fillMaxSize(),
                             verticalArrangement = Arrangement.spacedBy(12.dp),
-                            contentPadding = androidx.compose.foundation.layout.PaddingValues(16.dp)
+                            contentPadding = PaddingValues(16.dp)
                         ) {
                             items(events) { event ->
                                 EventCard(event = event)

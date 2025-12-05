@@ -1,4 +1,4 @@
-package com.micahnyabuto.livespotevents.core.navigation
+package com.micahnyabuto.livespotevents.ui.navigation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -27,9 +27,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.micahnyabuto.livespotevents.ui.screens.create.CreateEventScreen
-import com.micahnyabuto.livespotevents.features.events.EventsScreen
-import com.micahnyabuto.livespotevents.features.explore.ExploreScreen
-import com.micahnyabuto.livespotevents.features.profile.ProfileScreen
+import com.micahnyabuto.livespotevents.ui.screens.events.EventsScreen
+import com.micahnyabuto.livespotevents.ui.screens.explore.ExploreScreen
+import com.micahnyabuto.livespotevents.ui.screens.profile.ProfileScreen
 
 @Composable
 fun MainGraph(
