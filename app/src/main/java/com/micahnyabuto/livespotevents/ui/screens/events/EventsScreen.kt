@@ -22,7 +22,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -47,7 +46,6 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.micahnyabuto.livespotevents.core.data.supabase.Event
 import com.micahnyabuto.livespotevents.core.navigation.Destinations
-import com.micahnyabuto.livespotevents.features.create.EventsViewModel
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
@@ -55,7 +53,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun EventsScreen(
     navController: NavController,
-    eventViewModel: EventsViewModel = koinViewModel()
+    eventViewModel: GetEventsViewModel = koinViewModel()
 ) {
     val scope = rememberCoroutineScope()
     var selectedFilter by remember { mutableStateOf("All") }
@@ -63,20 +61,10 @@ fun EventsScreen(
     val events by eventViewModel.events.collectAsState()
     var isLoading by remember { mutableStateOf(true) }
     var isRefreshing by remember { mutableStateOf(false) }
-    val pullToRefreshState = rememberPullToRefreshState()
 
     LaunchedEffect(Unit) {
         eventViewModel.loadEvents()
         isLoading = false
-    }
-
-    val refreshEvents = {
-        scope.launch {
-            isRefreshing = true
-            eventViewModel.loadEvents()
-            isRefreshing = false
-        }
-        Unit
     }
 
     Scaffold(
@@ -93,8 +81,16 @@ fun EventsScreen(
     ) { innerPadding ->
         PullToRefreshBox(
             isRefreshing = isRefreshing,
-            onRefresh = refreshEvents,
-            state = pullToRefreshState,
+            onRefresh = {
+                scope.launch {
+                    isRefreshing = true
+                    try {
+                        eventViewModel.loadEvents()
+                    } finally {
+                        isRefreshing = false
+                    }
+                }
+            },
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
@@ -130,22 +126,6 @@ fun EventsScreen(
                             Spacer(modifier = Modifier.padding(8.dp))
                             Text(
                                 text = "Loading events...",
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
-                    }
-                    isRefreshing -> {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(16.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            CircularProgressIndicator()
-                            Spacer(modifier = Modifier.padding(8.dp))
-                            Text(
-                                text = "Refreshing events...",
                                 style = MaterialTheme.typography.bodyMedium
                             )
                         }
