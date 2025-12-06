@@ -24,13 +24,11 @@ fun rememberImagePicker(
         Manifest.permission.READ_EXTERNAL_STORAGE
     }
 
-    // Gallery launcher
     val galleryLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri -> onImagePicked(uri) }
     )
 
-    // Permission launcher
     val permissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
         onResult = { granted ->
@@ -42,7 +40,6 @@ fun rememberImagePicker(
         }
     )
 
-    // Return a lambda you can call in your button
     return remember {
         {
             val status = ContextCompat.checkSelfPermission(context, imagePermission)

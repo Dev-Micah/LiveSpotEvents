@@ -3,10 +3,10 @@ package com.micahnyabuto.livespotevents.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val PrimaryColor = Color(0xffBF36A1 )
+val PrimaryColor = Color(0xFFFF5722 )
 val PrimaryLightColor = PrimaryColor.copy(alpha = 0.75f)
 
-val SecondaryColor = Color(0xffD987C3)
+val SecondaryColor = Color(0xFFFF5931)
 val SecondaryLightColor = SecondaryColor.copy(alpha = 0.75f)
 
 val PrimaryTextColor = Color(0xffffffff)

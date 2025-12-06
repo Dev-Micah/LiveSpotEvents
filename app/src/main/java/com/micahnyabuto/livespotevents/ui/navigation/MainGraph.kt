@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -32,7 +33,7 @@ import com.micahnyabuto.livespotevents.ui.screens.explore.ExploreScreen
 import com.micahnyabuto.livespotevents.ui.screens.profile.ProfileScreen
 
 @Composable
-fun MainGraph(
+fun MainScreen(
     navController: NavHostController
 ){
     val navBackStackEntry by navController.currentBackStackEntryAsState()
