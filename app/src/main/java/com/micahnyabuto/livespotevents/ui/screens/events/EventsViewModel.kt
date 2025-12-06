@@ -21,3 +21,10 @@ class GetEventsViewModel(
         }
     }
 }
+
+
+data class EventsUiState(
+    val isLoading: Boolean = false,
+    val events: List<Event> = emptyList(),
+    val error: String? = null,
+)
