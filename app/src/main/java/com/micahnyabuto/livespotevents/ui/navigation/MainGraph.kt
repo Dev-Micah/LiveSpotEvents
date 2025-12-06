@@ -27,15 +27,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.micahnyabuto.livespotevents.ui.screens.events.CreateEventScreen
 import com.micahnyabuto.livespotevents.ui.screens.events.EventsScreen
 import com.micahnyabuto.livespotevents.ui.screens.explore.ExploreScreen
 import com.micahnyabuto.livespotevents.ui.screens.profile.ProfileScreen
 
 @Composable
-fun MainScreen(
-    navController: NavHostController
-){
+fun MainScreen(){
+    val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route.orEmpty()
     val showBottomNavigation = currentRoute !in  listOf(

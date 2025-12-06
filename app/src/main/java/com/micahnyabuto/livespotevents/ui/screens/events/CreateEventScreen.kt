@@ -21,7 +21,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -43,6 +42,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.micahnyabuto.livespotevents.core.permissions.rememberImagePicker
+import com.micahnyabuto.livespotevents.ui.components.CustomButton
+import com.micahnyabuto.livespotevents.ui.components.CustomTextField
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,8 +52,8 @@ fun CreateEventScreen(
     eventsViewModel: EventsViewModel =koinViewModel()
 ) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
+   // val scope = rememberCoroutineScope()
+   // var imageUri by remember { mutableStateOf<Uri?>(null) }
     val eventTitle = remember { mutableStateOf("") }
     val eventDate = remember { mutableStateOf("") }
     val eventTime = remember { mutableStateOf("") }
@@ -100,58 +101,34 @@ fun CreateEventScreen(
                     .padding(16.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                OutlinedTextField(
+                CustomTextField(
                     value = eventTitle.value,
                     onValueChange = { eventTitle.value = it },
-                    label = { Text("Event Title") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    singleLine = true,
+                    label = "Event Title"
                 )
 
-                OutlinedTextField(
+                CustomTextField(
                     value = eventDate.value,
                     onValueChange = { eventDate.value = it },
-                    label = { Text("Date") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    shape = RoundedCornerShape(12.dp),
+                    label = "Date"
                 )
 
-                OutlinedTextField(
+                CustomTextField(
                     value = eventTime.value,
                     onValueChange = { eventTime.value = it },
-                    label = { Text("Time") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    shape = RoundedCornerShape(12.dp),
+                    label = "Time"
                 )
 
-                OutlinedTextField(
+                CustomTextField(
                     value = eventLocation.value,
                     onValueChange = { eventLocation.value = it },
-                    label = { Text("Location") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    shape = RoundedCornerShape(12.dp),
+                    label = "Location"
                 )
 
-                OutlinedTextField(
+                CustomTextField(
                     value = eventDescription.value,
                     onValueChange = { eventDescription.value = it },
-                    label = { Text("Description") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(150.dp)
-                        .padding(vertical = 8.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    minLines = 5,
-                    maxLines = 10
+                    label = "Description",
                 )
 
                 Column(
@@ -191,7 +168,7 @@ fun CreateEventScreen(
                     }
                 }
 
-                Button(
+                CustomButton(
                     onClick = {
                         isLoading = true
                         eventsViewModel.createEvent(
@@ -204,34 +181,22 @@ fun CreateEventScreen(
                             imageUri = selectedImage,
                             onSuccess = {
                                 isLoading = false
-                                // Clear form after successful creation
                                 eventTitle.value = ""
                                 eventDate.value = ""
                                 eventTime.value = ""
                                 eventLocation.value = ""
                                 eventDescription.value = ""
                                 selectedImage = null
-                                // TODO: Show success message or navigate back
                             },
                             onError = { error ->
                                 isLoading = false
-                                // TODO: Show error message
                                 error.printStackTrace()
                             }
                         )
                     },
                     enabled = !isLoading,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp)
-                        .padding(vertical = 8.dp),
-                    shape = RoundedCornerShape(12.dp),
-                ) {
-                    Text(
-                        text = if (isLoading) "Creating Event..." else "Create Event",
-                        fontSize = 16.sp
-                    )
-                }
+                    text = "Create Event"
+                )
             }
         }
     }
