@@ -54,7 +54,6 @@ class EventsViewModel(private val repository: EventsRepository) : ViewModel() {
                     image_url = imageUrl
                 )
                 repository.createEvent(event)
-                // Refresh the events list after successful creation
                 loadEvents()
                 onSuccess()
             } catch (e: Exception) {
