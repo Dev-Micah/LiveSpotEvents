@@ -9,22 +9,17 @@ import androidx.navigation.compose.rememberNavController
 import com.micahnyabuto.livespotevents.ui.screens.splash.SplashScreen
 
 @Composable
-fun AppNavHost(
-    modifier: Modifier = Modifier
-){
+fun AppNavHost(){
     val navController = rememberNavController()
     NavHost(
-        modifier = modifier,
-        navController = navController,
-        startDestination = Destinations.Splash.route
+        startDestination = Destinations.Splash.route,
+        navController = navController
     ) {
         composable (Destinations.Splash.route){
             SplashScreen(navController = navController)
         }
         composable (Destinations.Main.route){
-            MainScreen(
-                navController = navController
-            )
+            MainScreen()
         }
 
     }
