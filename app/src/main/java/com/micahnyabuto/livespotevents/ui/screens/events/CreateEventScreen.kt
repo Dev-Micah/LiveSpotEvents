@@ -1,4 +1,4 @@
-package com.micahnyabuto.livespotevents.ui.screens.create
+package com.micahnyabuto.livespotevents.ui.screens.events
 
 import android.net.Uri
 import androidx.compose.foundation.Image
@@ -48,7 +48,7 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateEventScreen(
-    eventsViewModel: EventsViewModel=koinViewModel()
+    eventsViewModel: EventsViewModel =koinViewModel()
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()

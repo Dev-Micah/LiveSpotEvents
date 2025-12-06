@@ -26,7 +26,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.micahnyabuto.livespotevents.ui.screens.create.CreateEventScreen
+import com.micahnyabuto.livespotevents.ui.screens.events.CreateEventScreen
 import com.micahnyabuto.livespotevents.ui.screens.events.EventsScreen
 import com.micahnyabuto.livespotevents.ui.screens.explore.ExploreScreen
 import com.micahnyabuto.livespotevents.ui.screens.profile.ProfileScreen

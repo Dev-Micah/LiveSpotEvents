@@ -1,4 +1,4 @@
-package com.micahnyabuto.livespotevents.ui.screens.create
+package com.micahnyabuto.livespotevents.ui.screens.events
 
 import android.content.Context
 import android.net.Uri
@@ -65,4 +65,8 @@ class EventsViewModel(private val repository: EventsRepository) : ViewModel() {
 
 }
 
-
+data class EventsUiState(
+    val isLoading: Boolean = false,
+    val events: List<Event> = emptyList(),
+    val error: String? = null,
+)

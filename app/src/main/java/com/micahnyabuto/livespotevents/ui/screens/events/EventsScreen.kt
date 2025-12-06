@@ -54,7 +54,7 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun EventsScreen(
     navController: NavController,
-    eventViewModel: GetEventsViewModel = koinViewModel()
+    eventViewModel: EventsViewModel = koinViewModel()
 ) {
     val scope = rememberCoroutineScope()
     var selectedFilter by remember { mutableStateOf("All") }
