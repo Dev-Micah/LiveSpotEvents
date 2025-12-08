@@ -49,6 +49,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -149,11 +150,12 @@ fun EventsScreen(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-                            Text(
-                                text = "No events found",
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
+                            EventsShimmerEffect()
+//                            Text(
+//                                text = "No events found",
+//                                style = MaterialTheme.typography.bodyLarge,
+//                                color = MaterialTheme.colorScheme.onSurfaceVariant
+//                            )
                         }
                     }
                     else -> {
@@ -305,9 +307,9 @@ fun Modifier.shimmerBackground(
 
     val brush = Brush.linearGradient(
         colors = listOf(
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f),
-            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+            Gray.copy(alpha = 0.6f),
+            Gray.copy(alpha = 0.2f),
+            Gray.copy(alpha = 0.6f)
         ),
         start = Offset.Zero,
         end = Offset(x = translateAnim.value, y = translateAnim.value)
