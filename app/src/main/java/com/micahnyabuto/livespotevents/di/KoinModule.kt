@@ -22,5 +22,3 @@ val appModule = module {
         EventsViewModel(get())
     }
 }
-
-//MVVM Architecture

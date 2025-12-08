@@ -11,35 +11,42 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.micahnyabuto.livespotevents.core.permissions.rememberImagePicker
 import com.micahnyabuto.livespotevents.ui.components.CustomButton
@@ -49,28 +56,47 @@ import org.koin.androidx.compose.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateEventScreen(
-    eventsViewModel: EventsViewModel =koinViewModel()
+    navController: NavController,
+    eventsViewModel: EventsViewModel = koinViewModel()
 ) {
     val context = LocalContext.current
-   // val scope = rememberCoroutineScope()
-   // var imageUri by remember { mutableStateOf<Uri?>(null) }
+    val uiState by eventsViewModel.uiState.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+
     val eventTitle = remember { mutableStateOf("") }
     val eventDate = remember { mutableStateOf("") }
     val eventTime = remember { mutableStateOf("") }
     val eventLocation = remember { mutableStateOf("") }
     val eventDescription = remember { mutableStateOf("") }
-
     var selectedImage by remember { mutableStateOf<Uri?>(null) }
-    var isLoading by remember { mutableStateOf(false) }
 
     val pickImage = rememberImagePicker(
         onImagePicked = { uri -> selectedImage = uri },
         onPermissionDenied = { /* Show snackbar or toast */ }
     )
 
+    LaunchedEffect(uiState) {
+        if (uiState.createError != null) {
+            snackbarHostState.showSnackbar(
+                message = uiState.createError!!,
+                actionLabel = "Dismiss"
+            )
+            eventsViewModel.resetCreateEventState()
+        }
 
+        if (!uiState.isCreating && uiState.createError == null && eventTitle.value.isNotEmpty()) {
+            navController.popBackStack()
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            eventsViewModel.resetCreateEventState()
+        }
+    }
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = {
@@ -82,7 +108,7 @@ fun CreateEventScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { /* Handle close */ }) {
+                    IconButton(onClick = { navController.popBackStack() }) {
                         Icon(Icons.Default.Close, contentDescription = "Close")
                     }
                 }
@@ -136,7 +162,7 @@ fun CreateEventScreen(
                         .fillMaxWidth()
                         .height(200.dp)
                         .padding(vertical = 16.dp)
-                        .border(2.dp, Color.LightGray, RoundedCornerShape(12.dp))
+                        .border(2.dp, MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(12.dp))
                         .padding(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
@@ -150,14 +176,14 @@ fun CreateEventScreen(
                                 .clip(RoundedCornerShape(12.dp)),
                             contentScale = ContentScale.Crop
                         )
-                    }else{
+                    } else {
                         Text(
                             "Upload Image",
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp,
-                            color = Color.Gray
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        Text("Add an image to your event", fontSize = 14.sp, color = Color.Gray)
+                        Text("Add an image to your event", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Spacer(modifier = Modifier.height(16.dp))
                         OutlinedButton(
                             onClick = { pickImage() },
@@ -170,7 +196,6 @@ fun CreateEventScreen(
 
                 CustomButton(
                     onClick = {
-                        isLoading = true
                         eventsViewModel.createEvent(
                             context = context,
                             title = eventTitle.value,
@@ -179,32 +204,26 @@ fun CreateEventScreen(
                             location = eventLocation.value,
                             description = eventDescription.value,
                             imageUri = selectedImage,
-                            onSuccess = {
-                                isLoading = false
-                                eventTitle.value = ""
-                                eventDate.value = ""
-                                eventTime.value = ""
-                                eventLocation.value = ""
-                                eventDescription.value = ""
-                                selectedImage = null
-                            },
-                            onError = { error ->
-                                isLoading = false
-                                error.printStackTrace()
-                            }
                         )
                     },
-                    enabled = !isLoading,
-                    text = "Create Event"
-                )
+                    enabled = !uiState.isCreating
+                ) {
+                    if (uiState.isCreating) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    } else {
+                        Text("Create Event")
+                    }
+                }
             }
         }
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun CreateEventScreenPreview() {
-    CreateEventScreen()
+    CreateEventScreen(navController = rememberNavController())
 }
-

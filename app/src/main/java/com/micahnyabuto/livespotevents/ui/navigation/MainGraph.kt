@@ -110,7 +110,9 @@ fun MainScreen(){
                 ExploreScreen()
             }
             composable(Destinations.Create.route) {
-                CreateEventScreen()
+                CreateEventScreen(
+                    navController = navController,
+                )
             }
             composable(Destinations.Profile.route) {
                 ProfileScreen()
