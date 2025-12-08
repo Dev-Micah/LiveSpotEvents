@@ -2,7 +2,6 @@ package com.micahnyabuto.livespotevents.ui.screens.events
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.micahnyabuto.livespotevents.data.supabase.Event
@@ -10,23 +9,26 @@ import com.micahnyabuto.livespotevents.domain.EventsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class EventsViewModel(private val repository: EventsRepository) : ViewModel() {
 
-    private val _events = MutableStateFlow<List<Event>>(emptyList())
-    val events: StateFlow<List<Event>> = _events.asStateFlow()
+    private val _uiState = MutableStateFlow(EventsUiState())
+    val uiState: StateFlow<EventsUiState> = _uiState.asStateFlow()
 
     fun loadEvents() {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
             try {
-                Log.d("EventsViewModel", "Loading events...")
                 val eventsList = repository.getEvents()
-                Log.d("EventsViewModel", "Loaded ${eventsList.size} events: $eventsList")
-                _events.value = eventsList
+                _uiState.update {
+                    it.copy(isLoading = false, events = eventsList)
+                }
             } catch (e: Exception) {
-                Log.e("EventsViewModel", "Error loading events", e)
-                e.printStackTrace()
+                _uiState.update {
+                    it.copy(isLoading = false, error = e.message)
+                }
             }
         }
     }
@@ -39,10 +41,9 @@ class EventsViewModel(private val repository: EventsRepository) : ViewModel() {
         location: String,
         description: String,
         imageUri: Uri?,
-        onSuccess: () -> Unit,
-        onError: (Throwable) -> Unit
     ) {
         viewModelScope.launch {
+            _uiState.update { it.copy(isCreating = true) }
             try {
                 val imageUrl = imageUri?.let { repository.uploadEventImage(context, it) }
                 val event = Event(
@@ -55,18 +56,21 @@ class EventsViewModel(private val repository: EventsRepository) : ViewModel() {
                 )
                 repository.createEvent(event)
                 loadEvents()
-                onSuccess()
+                _uiState.update { it.copy(isCreating = false, createError = null) }
             } catch (e: Exception) {
-                onError(e)
+                _uiState.update { it.copy(isCreating = false, createError = e.message) }
             }
         }
     }
-
-
+    fun resetCreateEventState() {
+        _uiState.update { it.copy(isCreating = false, createError = null) }
+    }
 }
 
 data class EventsUiState(
     val isLoading: Boolean = false,
     val events: List<Event> = emptyList(),
     val error: String? = null,
+    val isCreating: Boolean = false,
+    val createError: String? = null
 )
