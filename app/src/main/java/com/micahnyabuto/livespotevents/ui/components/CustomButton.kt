@@ -1,11 +1,10 @@
 package com.micahnyabuto.livespotevents.ui.components
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -13,9 +12,9 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun CustomButton(
     modifier: Modifier = Modifier,
-    text: String,
     onClick: () -> Unit,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    content: @Composable RowScope.() -> Unit
 ) {
     Button(
         onClick = onClick,
@@ -23,8 +22,7 @@ fun CustomButton(
             .fillMaxWidth()
             .height(50.dp),
         shape = RoundedCornerShape(8.dp),
-        enabled = enabled
-    ) {
-        Text(text = text)
-    }
+        enabled = enabled,
+        content = content
+    )
 }
