@@ -1,13 +1,22 @@
 package com.micahnyabuto.livespotevents.ui.screens.events
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -17,16 +26,15 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -37,7 +45,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -59,13 +71,11 @@ fun EventsScreen(
     val scope = rememberCoroutineScope()
     var selectedFilter by remember { mutableStateOf("All") }
     val filters = listOf("All", "Today", "Tomorrow")
-    val events by eventViewModel.events.collectAsState()
-    var isLoading by remember { mutableStateOf(true) }
+    val uiState by eventViewModel.uiState.collectAsState()
     var isRefreshing by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         eventViewModel.loadEvents()
-        isLoading = false
     }
 
     Scaffold(
@@ -113,7 +123,10 @@ fun EventsScreen(
                 }
 
                 when {
-                    isLoading -> {
+                    uiState.isLoading -> {
+                        EventsShimmerEffect()
+                    }
+                    uiState.error != null -> {
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -121,15 +134,14 @@ fun EventsScreen(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-                            CircularProgressIndicator()
-                            Spacer(modifier = Modifier.padding(8.dp))
                             Text(
-                                text = "Loading events...",
-                                style = MaterialTheme.typography.bodyMedium
+                                text = uiState.error ?: "An unknown error occurred",
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.error
                             )
                         }
                     }
-                    events.isEmpty() -> {
+                    uiState.events.isEmpty() -> {
                         Column(
                             modifier = Modifier
                                 .fillMaxSize()
@@ -150,7 +162,7 @@ fun EventsScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp),
                             contentPadding = PaddingValues(16.dp)
                         ) {
-                            items(events) { event ->
+                            items(uiState.events) { event ->
                                 EventCard(event = event)
                             }
                         }
@@ -219,4 +231,87 @@ fun EventCard(event: Event) {
             )
         }
     }
+}
+
+@Composable
+fun EventsShimmerEffect() {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(16.dp)
+    ) {
+        items(10) {
+            ShimmerEventCard()
+        }
+    }
+}
+
+@Composable
+fun ShimmerEventCard() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(80.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .shimmerBackground()
+        )
+
+        Spacer(modifier = Modifier.width(12.dp))
+
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(fraction = 0.4f)
+                    .height(14.dp)
+                    .shimmerBackground(shape = RoundedCornerShape(4.dp))
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(fraction = 0.9f)
+                    .height(18.dp)
+                    .shimmerBackground(shape = RoundedCornerShape(4.dp))
+            )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(fraction = 0.7f)
+                    .height(16.dp)
+                    .shimmerBackground(shape = RoundedCornerShape(4.dp))
+            )
+        }
+    }
+}
+
+fun Modifier.shimmerBackground(
+    shape: Shape = RoundedCornerShape(4.dp)
+): Modifier = composed {
+    val transition = rememberInfiniteTransition(label = "")
+    val translateAnim = transition.animateFloat(
+        initialValue = 0f,
+        targetValue = 1000f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 1200,
+                easing = FastOutSlowInEasing
+            ),
+            repeatMode = RepeatMode.Restart
+        ), label = ""
+    )
+
+    val brush = Brush.linearGradient(
+        colors = listOf(
+            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f),
+            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.2f),
+            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
+        ),
+        start = Offset.Zero,
+        end = Offset(x = translateAnim.value, y = translateAnim.value)
+    )
+
+    background(brush, shape)
 }
