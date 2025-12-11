@@ -10,9 +10,7 @@ import io.github.jan.supabase.storage.storage
 import io.ktor.http.*
 import java.io.File
 
-class EventsRepository(
-    private val client: SupabaseClientInstance
-) {
+class EventsRepository(private val client: SupabaseClientInstance) {
     suspend fun createEvent(event: Event) {
         try {
             Log.d("EventsRepository", "Creating event: $event")
@@ -23,6 +21,7 @@ class EventsRepository(
             throw e
         }
     }
+
 
     suspend fun uploadEventImage(context: Context, imageUri: Uri): String? {
         return try {
@@ -67,4 +66,5 @@ class EventsRepository(
             throw e
         }
     }
+
 }

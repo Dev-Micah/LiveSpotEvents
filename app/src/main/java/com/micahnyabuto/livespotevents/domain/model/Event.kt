@@ -12,4 +12,5 @@ data class Event(
     val description: String?,
     val image_url: String?,
     val created_at: String? = null
+
 )
