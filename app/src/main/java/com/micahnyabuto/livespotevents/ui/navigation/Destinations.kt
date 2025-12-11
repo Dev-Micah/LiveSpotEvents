@@ -9,6 +9,4 @@ sealed class Destinations(val route: String) {
     object Main : Destinations("main")
     object Login : Destinations("login")
     object Register : Destinations("register")
-
-
 }

@@ -5,8 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
+import com.micahnyabuto.livespotevents.ui.auth.register.RegisterScreen
 import com.micahnyabuto.livespotevents.ui.navigation.AppNavHost
-import com.micahnyabuto.livespotevents.ui.navigation.MainScreen
 import com.micahnyabuto.livespotevents.ui.theme.LiveSpotEventsTheme
 
 class MainActivity : ComponentActivity() {
@@ -15,12 +15,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             LiveSpotEventsTheme {
-//                val navController = rememberNavController()
+                //val navController = rememberNavController()
 //                MainScreen(navController)
-                AppNavHost()
+               AppNavHost()
+                //LoginScreen()
+                //RegisterScreen(navController)
 
             }
         }
     }
 }
-
