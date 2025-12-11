@@ -2,45 +2,46 @@ package com.micahnyabuto.livespotevents.ui.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddBox
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Explore
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.AddBox
+import androidx.compose.material.icons.outlined.AddCircleOutline
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 
+// This enum was missing. Your code depends on it for the bottom navigation.
 enum class BottomNavigationItem(
-    val selectedIcon: ImageVector,
-    val unselectedIcon: ImageVector,
+    val route: String,
     val label: String,
-    val route: String
+    val selectedIcon: ImageVector,
+    val unselectedIcon: ImageVector
 ) {
-    EVENTS(
-        selectedIcon = Icons.Filled.Home,
-        unselectedIcon = Icons.Outlined.Home,
+    HOME(
+        route = Destinations.Home.route,
         label = "Home",
-        route = "home"
+        selectedIcon = Icons.Filled.Home,
+        unselectedIcon = Icons.Outlined.Home
     ),
     EXPLORE(
-        selectedIcon = Icons.Filled.Explore,
-        unselectedIcon = Icons.Outlined.Explore,
+        route = Destinations.Explore.route,
         label = "Explore",
-        route = "explore"
+        selectedIcon = Icons.Filled.Explore,
+        unselectedIcon = Icons.Outlined.Explore
     ),
-//    CREATE(
-//        selectedIcon = Icons.Filled.AddBox,
-//        unselectedIcon = Icons.Outlined.AddBox,
-//        label = "Create",
-//        route = "create"
-//    ),
+    CREATE(
+        route = Destinations.Create.route,
+        label = "Create",
+        selectedIcon = Icons.Filled.AddCircle,
+        unselectedIcon = Icons.Outlined.AddCircleOutline
+    ),
     PROFILE(
-        selectedIcon = Icons.Filled.Person,
-        unselectedIcon = Icons.Outlined.Person,
+        route = Destinations.Profile.route,
         label = "Profile",
-        route = "profile"
+        selectedIcon = Icons.Filled.Person,
+        unselectedIcon = Icons.Outlined.Person
     )
-
-
 }

@@ -83,11 +83,11 @@ fun EventsScreen(
         topBar = {
             TopAppBar(
                 title = { Text(text = "Events") },
-                actions = {
-                    IconButton(onClick = { navController.navigate(Destinations.Create.route) }) {
-                        Icon(Icons.Default.Add, contentDescription = "Add")
-                    }
-                }
+//                actions = {
+//                    IconButton(onClick = { navController.navigate(Destinations.Create.route) }) {
+//                        Icon(Icons.Default.Add, contentDescription = "Add")
+//                    }
+//                }
             )
         }
     ) { innerPadding ->
