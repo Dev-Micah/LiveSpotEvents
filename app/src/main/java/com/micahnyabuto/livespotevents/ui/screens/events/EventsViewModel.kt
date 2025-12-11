@@ -4,8 +4,8 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.micahnyabuto.livespotevents.data.supabase.Event
-import com.micahnyabuto.livespotevents.domain.EventsRepository
+import com.micahnyabuto.livespotevents.domain.model.Event
+import com.micahnyabuto.livespotevents.domain.repository.EventsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

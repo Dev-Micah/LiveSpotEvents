@@ -1,10 +1,10 @@
-package com.micahnyabuto.livespotevents.domain
+package com.micahnyabuto.livespotevents.domain.repository
 
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import com.micahnyabuto.livespotevents.data.supabase.Event
-import com.micahnyabuto.livespotevents.data.supabase.SupabaseClientInstance
+import com.micahnyabuto.livespotevents.domain.model.Event
+import com.micahnyabuto.livespotevents.data.supabaseclient.SupabaseClientInstance
 import io.github.jan.supabase.postgrest.from
 import io.github.jan.supabase.storage.storage
 import io.ktor.http.*

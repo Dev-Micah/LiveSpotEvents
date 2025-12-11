@@ -1,7 +1,7 @@
 package com.micahnyabuto.livespotevents.di
 
-import com.micahnyabuto.livespotevents.data.supabase.SupabaseClientInstance
-import com.micahnyabuto.livespotevents.domain.EventsRepository
+import com.micahnyabuto.livespotevents.data.supabaseclient.SupabaseClientInstance
+import com.micahnyabuto.livespotevents.domain.repository.EventsRepository
 import com.micahnyabuto.livespotevents.ui.screens.events.EventsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module

@@ -58,7 +58,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
-import com.micahnyabuto.livespotevents.data.supabase.Event
+import com.micahnyabuto.livespotevents.domain.model.Event
 import com.micahnyabuto.livespotevents.ui.navigation.Destinations
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel

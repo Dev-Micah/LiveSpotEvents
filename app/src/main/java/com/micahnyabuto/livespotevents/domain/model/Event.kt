@@ -1,4 +1,4 @@
-package com.micahnyabuto.livespotevents.data.supabase
+package com.micahnyabuto.livespotevents.domain.model
 
 import kotlinx.serialization.Serializable
 

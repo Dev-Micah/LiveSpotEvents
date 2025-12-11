@@ -1,4 +1,4 @@
-package com.micahnyabuto.livespotevents.data.supabase
+package com.micahnyabuto.livespotevents.data.supabaseclient
 
 import io.github.jan.supabase.auth.Auth
 import io.github.jan.supabase.createSupabaseClient
