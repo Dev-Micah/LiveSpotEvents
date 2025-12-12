@@ -47,12 +47,13 @@ class EventsViewModel(private val repository: EventsRepository) : ViewModel() {
             try {
                 val imageUrl = imageUri?.let { repository.uploadEventImage(context, it) }
                 val event = Event(
+                    id = null,
                     title = title,
                     event_date = date,
                     event_time = time,
                     location = location,
                     description = description,
-                    image_url = imageUrl
+                    image_url = imageUrl,
                 )
                 repository.createEvent(event)
                 loadEvents()

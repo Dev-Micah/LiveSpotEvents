@@ -19,7 +19,7 @@ fun DateDialog(
 ) {
     val datePickerState = rememberDatePickerState()
     val selectedDate = datePickerState.selectedDateMillis?.let {
-        SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date(it))
+        SimpleDateFormat("yyy/MM/dd", Locale.getDefault()).format(Date(it))
     } ?: ""
 
     DatePickerDialog(

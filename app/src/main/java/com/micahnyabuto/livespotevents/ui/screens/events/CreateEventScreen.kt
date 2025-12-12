@@ -16,7 +16,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -51,6 +51,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.micahnyabuto.livespotevents.core.permissions.rememberImagePicker
 import com.micahnyabuto.livespotevents.ui.components.CustomButton
 import com.micahnyabuto.livespotevents.ui.components.CustomTextField
+import com.micahnyabuto.livespotevents.utils.DateDialog
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,6 +70,8 @@ fun CreateEventScreen(
     val eventLocation = remember { mutableStateOf("") }
     val eventDescription = remember { mutableStateOf("") }
     var selectedImage by remember { mutableStateOf<Uri?>(null) }
+    val showDatePicker = remember { mutableStateOf(false) }
+
 
     val pickImage = rememberImagePicker(
         onImagePicked = { uri -> selectedImage = uri },
@@ -95,6 +98,18 @@ fun CreateEventScreen(
         }
     }
 
+    if (showDatePicker.value) {
+        DateDialog(
+            onDateSelected = {
+                eventDate.value = it
+                showDatePicker.value = false
+            },
+            onDismiss = {
+                showDatePicker.value = false
+            }
+        )
+    }
+
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
@@ -107,12 +122,8 @@ fun CreateEventScreen(
                         modifier = Modifier.fillMaxWidth()
                     )
                 },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(Icons.Default.Close, contentDescription = "Close")
-                    }
-                }
-            )
+
+                )
         }
     ) { innerPadding ->
 
@@ -136,7 +147,12 @@ fun CreateEventScreen(
                 CustomTextField(
                     value = eventDate.value,
                     onValueChange = { eventDate.value = it },
-                    label = "Date"
+                    label = "Date",
+                    trailingIcon = {
+                        IconButton(onClick = { showDatePicker.value = true }) {
+                            Icon(imageVector = Icons.Default.CalendarMonth, contentDescription = "Pick Date")
+                        }
+                    }
                 )
 
                 CustomTextField(

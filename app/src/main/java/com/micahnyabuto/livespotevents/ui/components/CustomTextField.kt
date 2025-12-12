@@ -15,7 +15,8 @@ fun CustomTextField(
     onValueChange: (String) -> Unit,
     label: String,
     isError: Boolean = false,
-    supportingText: String? = null
+    supportingText: String? = null,
+    trailingIcon: @Composable (() -> Unit)? = null
 ) {
     OutlinedTextField(
         value = value,
@@ -29,6 +30,7 @@ fun CustomTextField(
             if (supportingText != null) {
                 Text(text = supportingText)
             }
-        }
+        },
+        trailingIcon = trailingIcon
     )
 }

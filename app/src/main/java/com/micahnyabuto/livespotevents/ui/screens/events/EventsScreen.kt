@@ -83,11 +83,6 @@ fun EventsScreen(
         topBar = {
             TopAppBar(
                 title = { Text(text = "Events") },
-//                actions = {
-//                    IconButton(onClick = { navController.navigate(Destinations.Create.route) }) {
-//                        Icon(Icons.Default.Add, contentDescription = "Add")
-//                    }
-//                }
             )
         }
     ) { innerPadding ->
@@ -150,12 +145,11 @@ fun EventsScreen(
                             horizontalAlignment = Alignment.CenterHorizontally,
                             verticalArrangement = Arrangement.Center
                         ) {
-                            EventsShimmerEffect()
-//                            Text(
-//                                text = "No events found",
-//                                style = MaterialTheme.typography.bodyLarge,
-//                                color = MaterialTheme.colorScheme.onSurfaceVariant
-//                            )
+                            Text(
+                               text = "No events found",
+                               style = MaterialTheme.typography.bodyLarge,
+                               color = MaterialTheme.colorScheme.onSurfaceVariant
+                           )
                         }
                     }
                     else -> {

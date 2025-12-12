@@ -2,7 +2,6 @@ package com.micahnyabuto.livespotevents.ui.navigation
 
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,7 +12,7 @@ import com.micahnyabuto.livespotevents.ui.screens.splash.SplashScreen
 
 @Composable
 fun AppNavHost() {
-    val navController = rememberNavController() // This is the App-level NavController
+    val navController = rememberNavController()
     NavHost(
         navController = navController,
         startDestination = Destinations.Splash.route
@@ -28,8 +27,7 @@ fun AppNavHost() {
             RegisterScreen(navController = navController)
         }
 
-        // THIS IS THE KEY CHANGE
-        // The "main" route now loads your entire Scaffold + Bottom Bar layout.
+
         composable(Destinations.Main.route) {
             MainScreen(appNavController = NavHostController(navController.context))
         }
