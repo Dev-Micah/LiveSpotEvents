@@ -51,7 +51,9 @@ import coil.compose.rememberAsyncImagePainter
 import com.micahnyabuto.livespotevents.core.permissions.rememberImagePicker
 import com.micahnyabuto.livespotevents.ui.components.CustomButton
 import com.micahnyabuto.livespotevents.ui.components.CustomTextField
+import com.micahnyabuto.livespotevents.ui.components.SuccessAnimation
 import com.micahnyabuto.livespotevents.utils.DateDialog
+import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -71,6 +73,7 @@ fun CreateEventScreen(
     val eventDescription = remember { mutableStateOf("") }
     var selectedImage by remember { mutableStateOf<Uri?>(null) }
     val showDatePicker = remember { mutableStateOf(false) }
+    var showSuccessAnimation by remember { mutableStateOf(false) }
 
 
     val pickImage = rememberImagePicker(
@@ -88,6 +91,8 @@ fun CreateEventScreen(
         }
 
         if (!uiState.isCreating && uiState.createError == null && eventTitle.value.isNotEmpty()) {
+            showSuccessAnimation = true
+            delay(2000) // Show animation for 2 seconds
             navController.popBackStack()
         }
     }
@@ -132,105 +137,122 @@ fun CreateEventScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp)
-                    .verticalScroll(rememberScrollState())
-            ) {
-                CustomTextField(
-                    value = eventTitle.value,
-                    onValueChange = { eventTitle.value = it },
-                    label = "Event Title"
-                )
-
-                CustomTextField(
-                    value = eventDate.value,
-                    onValueChange = { eventDate.value = it },
-                    label = "Date",
-                    trailingIcon = {
-                        IconButton(onClick = { showDatePicker.value = true }) {
-                            Icon(imageVector = Icons.Default.CalendarMonth, contentDescription = "Pick Date")
-                        }
-                    }
-                )
-
-                CustomTextField(
-                    value = eventTime.value,
-                    onValueChange = { eventTime.value = it },
-                    label = "Time"
-                )
-
-                CustomTextField(
-                    value = eventLocation.value,
-                    onValueChange = { eventLocation.value = it },
-                    label = "Location"
-                )
-
-                CustomTextField(
-                    value = eventDescription.value,
-                    onValueChange = { eventDescription.value = it },
-                    label = "Description",
-                )
-
+            if (showSuccessAnimation) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                    SuccessAnimation()
+                }
+            } else {
                 Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                        .padding(vertical = 16.dp)
-                        .border(2.dp, MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(12.dp))
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                        .fillMaxSize()
+                        .padding(16.dp)
+                        .verticalScroll(rememberScrollState())
                 ) {
-                    if (selectedImage != null) {
-                        Image(
-                            painter = rememberAsyncImagePainter(selectedImage),
-                            contentDescription = "Selected Event Image",
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .clip(RoundedCornerShape(12.dp)),
-                            contentScale = ContentScale.Crop
-                        )
-                    } else {
-                        Text(
-                            "Upload Image",
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 18.sp,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text("Add an image to your event", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        Spacer(modifier = Modifier.height(16.dp))
-                        OutlinedButton(
-                            onClick = { pickImage() },
-                            shape = RoundedCornerShape(20.dp)
-                        ) {
-                            Text("Upload")
+                    CustomTextField(
+                        value = eventTitle.value,
+                        onValueChange = { eventTitle.value = it },
+                        label = "Event Title"
+                    )
+
+                    CustomTextField(
+                        value = eventDate.value,
+                        onValueChange = { eventDate.value = it },
+                        label = "Date",
+                        trailingIcon = {
+                            IconButton(onClick = { showDatePicker.value = true }) {
+                                Icon(
+                                    imageVector = Icons.Default.CalendarMonth,
+                                    contentDescription = "Pick Date"
+                                )
+                            }
+                        }
+                    )
+
+                    CustomTextField(
+                        value = eventTime.value,
+                        onValueChange = { eventTime.value = it },
+                        label = "Time"
+                    )
+
+                    CustomTextField(
+                        value = eventLocation.value,
+                        onValueChange = { eventLocation.value = it },
+                        label = "Location"
+                    )
+
+                    CustomTextField(
+                        value = eventDescription.value,
+                        onValueChange = { eventDescription.value = it },
+                        label = "Description",
+                    )
+
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(200.dp)
+                            .padding(vertical = 16.dp)
+                            .border(
+                                2.dp,
+                                MaterialTheme.colorScheme.surfaceVariant,
+                                RoundedCornerShape(12.dp)
+                            )
+                            .padding(16.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        if (selectedImage != null) {
+                            Image(
+                                painter = rememberAsyncImagePainter(selectedImage),
+                                contentDescription = "Selected Event Image",
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .clip(RoundedCornerShape(12.dp)),
+                                contentScale = ContentScale.Crop
+                            )
+                        } else {
+                            Text(
+                                "Upload Image",
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 18.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Text(
+                                "Add an image to your event",
+                                fontSize = 14.sp,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            OutlinedButton(
+                                onClick = { pickImage() },
+                                shape = RoundedCornerShape(20.dp)
+                            ) {
+                                Text("Upload")
+                            }
                         }
                     }
-                }
 
-                CustomButton(
-                    onClick = {
-                        eventsViewModel.createEvent(
-                            context = context,
-                            title = eventTitle.value,
-                            date = eventDate.value,
-                            time = eventTime.value,
-                            location = eventLocation.value,
-                            description = eventDescription.value,
-                            imageUri = selectedImage,
-                        )
-                    },
-                    enabled = !uiState.isCreating
-                ) {
-                    if (uiState.isCreating) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            color = MaterialTheme.colorScheme.onPrimary
-                        )
-                    } else {
-                        Text("Create Event")
+                    CustomButton(
+                        onClick = {
+                            eventsViewModel.createEvent(
+                                context = context,
+                                title = eventTitle.value,
+                                date = eventDate.value,
+                                time = eventTime.value,
+                                location = eventLocation.value,
+                                description = eventDescription.value,
+                                imageUri = selectedImage,
+                            )
+                        },
+                        enabled = !uiState.isCreating
+                    ) {
+                        if (uiState.isCreating) {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(24.dp),
+                                color = MaterialTheme.colorScheme.onPrimary
+                            )
+                        } else {
+                            Text("Create Event")
+                        }
                     }
                 }
             }
