@@ -10,16 +10,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,19 +23,26 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun RegisterScreen(
-    navController: NavController
+    navController: NavController,
+    registerViewModel: RegisterViewModel = viewModel()
 ) {
+    // Observe navigation events from the ViewModel
+    LaunchedEffect(key1 = Unit) {
+        registerViewModel.navigationEvent.collect { route ->
+            navController.navigate(route)
+        }
+    }
 
-    var email by remember {  mutableStateOf("")}
-    var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") }
+    // Get state from the ViewModel
+    val email = registerViewModel.email
+    val password = registerViewModel.password
+    val confirmPassword = registerViewModel.confirmPassword
 
     Column(
         modifier = Modifier
@@ -59,7 +61,7 @@ fun RegisterScreen(
 
         AuthTextField(
             value = email,
-            onValueChange = { email = it },
+            onValueChange = { registerViewModel.onEmailChange(it) },
             label = "Enter your email",
             placeholder = "name@example.com"
         )
@@ -68,7 +70,7 @@ fun RegisterScreen(
 
         AuthTextField(
             value = password,
-            onValueChange = { password = it },
+            onValueChange = { registerViewModel.onPasswordChange(it) },
             label = "Enter your password",
             placeholder = "password",
             isPassword = true
@@ -78,7 +80,7 @@ fun RegisterScreen(
 
         AuthTextField(
             value = confirmPassword,
-            onValueChange = {confirmPassword = it},
+            onValueChange = { registerViewModel.onConfirmPasswordChange(it) },
             label = "Confirm your password",
             placeholder = "password",
             isPassword = true
@@ -88,16 +90,17 @@ fun RegisterScreen(
 
         Button(
             onClick = {
-                navController.navigate("login")
+                // Delegate the click event to the ViewModel
+                registerViewModel.onSignUpClicked()
             },
             modifier = Modifier
                 .clip(RoundedCornerShape(2.dp))
                 .fillMaxWidth(),
-
         ) {
             Text(text = "Sign Up")
         }
 
+        // --- Rest of your ClickableText code remains the same ---
         val annotatedString = buildAnnotatedString {
             append("Already have an account? ")
             withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
@@ -121,6 +124,7 @@ fun RegisterScreen(
     }
 }
 
+// --- Your AuthTextField composable remains the same ---
 @Composable
 fun AuthTextField(
     value: String,

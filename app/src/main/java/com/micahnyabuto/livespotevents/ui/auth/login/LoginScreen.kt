@@ -31,13 +31,27 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.micahnyabuto.livespotevents.ui.auth.register.AuthTextField
 
+// Other imports...
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.micahnyabuto.livespotevents.ui.auth.login.LoginViewModel
+import androidx.compose.runtime.LaunchedEffect
+
+
 @Composable
 fun LoginScreen(
-    navController: NavController
+    navController: NavController,
+    loginViewModel: LoginViewModel = viewModel()
 ) {
+    // Observe navigation events from the ViewModel
+    LaunchedEffect(key1 = Unit) {
+        loginViewModel.navigationEvent.collect { route ->
+            navController.navigate(route)
+        }
+    }
 
-    var email by remember {  mutableStateOf("")}
-    var password by remember { mutableStateOf("") }
+    // Get state from the ViewModel
+    val email = loginViewModel.email
+    val password = loginViewModel.password
 
     Column(
         modifier = Modifier
@@ -56,7 +70,8 @@ fun LoginScreen(
 
         AuthTextField(
             value = email,
-            onValueChange = { email = it },
+            // Call ViewModel methods on value change
+            onValueChange = { loginViewModel.onEmailChange(it) },
             label = "Enter your email",
             placeholder = "name@example.com"
         )
@@ -65,7 +80,8 @@ fun LoginScreen(
 
         AuthTextField(
             value = password,
-            onValueChange = { password = it },
+            // Call ViewModel methods on value change
+            onValueChange = { loginViewModel.onPasswordChange(it) },
             label = "Enter your password",
             placeholder = "password",
             isPassword = true
@@ -75,7 +91,8 @@ fun LoginScreen(
 
         Button(
             onClick = {
-                navController.navigate("main")
+                // Delegate the click event to the ViewModel
+                loginViewModel.onSignInClicked()
             },
             modifier = Modifier
                 .clip(RoundedCornerShape(9.dp))
@@ -84,6 +101,7 @@ fun LoginScreen(
             Text(text = "Sign In")
         }
 
+        // ... (rest of your ClickableText code remains the same)
         val annotatedString = buildAnnotatedString {
             append("Don't have an account? ")
             withStyle(style = SpanStyle(color = MaterialTheme.colorScheme.primary)) {
