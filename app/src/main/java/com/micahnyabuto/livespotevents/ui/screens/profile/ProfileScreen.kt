@@ -223,10 +223,3 @@ fun EventCard(date: String, title: String, time: String, imageRes: Int) {
     }
 }
 
-// Add a Preview to see your design without running the app
-@Preview(showBackground = true)
-@Composable
-fun ProfileScreenPreview() {
-    // You might want to wrap this in your app's theme
-    ProfileScreen()
-}

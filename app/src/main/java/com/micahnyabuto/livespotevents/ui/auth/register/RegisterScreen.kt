@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -132,24 +133,22 @@ fun AuthTextField(
     label: String,
     placeholder: String,
     modifier: Modifier = Modifier,
-    isPassword: Boolean = false
+    isPassword: Boolean = false,
+    isError: Boolean = false,
+    supportingText: String? = null
 ) {
-    Column(
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(text = label) },
         modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 8.dp)
-    ) {
-        Text(
-            text = label,
-            modifier = Modifier
-                .padding(bottom = 9.dp)
-        )
-        TextField(
-            value = value,
-            onValueChange = onValueChange,
-            placeholder = { Text(text = placeholder) },
-            modifier = Modifier.fillMaxWidth(),
-            visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None
-        )
-    }
+            .fillMaxWidth(),
+        shape = RoundedCornerShape(8.dp),
+        isError = isError,
+        supportingText = {
+            if (supportingText != null) {
+                Text(text = supportingText)
+            }
+        }
+    )
 }
