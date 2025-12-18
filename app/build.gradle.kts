@@ -88,6 +88,9 @@ dependencies {
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.navigation3.runtime)
 
+    implementation("androidx.compose.foundation:foundation:1.10.0")
+
+
     //coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 

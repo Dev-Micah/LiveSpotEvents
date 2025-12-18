@@ -12,7 +12,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import com.micahnyabuto.livespotevents.R
-import com.micahnyabuto.livespotevents.ui.navigation.Destinations
+import com.micahnyabuto.livespotevents.ui.navigation.Main
+import com.micahnyabuto.livespotevents.ui.navigation.Splash
 import kotlinx.coroutines.delay
 
 @Composable
@@ -21,8 +22,8 @@ fun SplashScreen(
 ){
     LaunchedEffect(Unit) {
         delay(3000)
-        navController.navigate(Destinations.Main.route){
-            popUpTo(Destinations.Splash.route){
+        navController.navigate(Main){
+            popUpTo(Splash){
                 inclusive =true
             }
         }

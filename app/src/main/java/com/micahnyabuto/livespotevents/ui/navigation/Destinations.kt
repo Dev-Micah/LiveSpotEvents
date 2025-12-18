@@ -1,12 +1,29 @@
 package com.micahnyabuto.livespotevents.ui.navigation
 
-sealed class Destinations(val route: String) {
-    object Home : Destinations("home")
-    object Explore : Destinations("explore")
-    object Create : Destinations("create")
-    object Profile : Destinations("profile")
-    object Splash : Destinations("splash")
-    object Main : Destinations("main")
-    object Login : Destinations("login")
-    object Register : Destinations("register")
-}
+
+import kotlinx.serialization.Serializable
+
+
+@Serializable
+object Home
+
+@Serializable
+object Explore
+
+@Serializable
+object Create
+
+@Serializable
+object Profile
+
+@Serializable
+object Splash
+
+@Serializable
+object Main
+
+@Serializable
+object Login
+
+@Serializable
+object Register
