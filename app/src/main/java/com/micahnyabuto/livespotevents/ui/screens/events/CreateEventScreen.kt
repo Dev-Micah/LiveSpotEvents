@@ -77,8 +77,11 @@ fun CreateEventScreen(
 
 
     val pickImage = rememberImagePicker(
-        onImagePicked = { uri -> selectedImage = uri },
-        onPermissionDenied = { /* Show snackbar or toast */ }
+        onImagePicked = { uri ->
+            selectedImage = uri
+        },
+        onPermissionDenied = {
+        }
     )
 
     LaunchedEffect(uiState) {
@@ -92,7 +95,7 @@ fun CreateEventScreen(
 
         if (!uiState.isCreating && uiState.createError == null && eventTitle.value.isNotEmpty()) {
             showSuccessAnimation = true
-            delay(2000) // Show animation for 2 seconds
+            delay(2000)
             navController.popBackStack()
         }
     }
@@ -233,6 +236,9 @@ fun CreateEventScreen(
 
                     CustomButton(
                         onClick = {
+//                            println("DEBUG CreateScreen: Creating event...")
+//                            println("DEBUG CreateScreen: selectedImage = $selectedImage")
+//                            println("DEBUG CreateScreen: title = ${eventTitle.value}")
                             eventsViewModel.createEvent(
                                 context = context,
                                 title = eventTitle.value,

@@ -25,7 +25,8 @@ class EventsRepository(private val client: SupabaseClientInstance) {
 
     suspend fun uploadEventImage(context: Context, imageUri: Uri): String? {
         return try {
-            val file = File(context.cacheDir, "event_${System.currentTimeMillis()}.jpg")
+            val filename = "event_${System.currentTimeMillis()}.jpg"
+            val file = File(context.cacheDir, filename)
 
             context.contentResolver.openInputStream(imageUri)?.use { input ->
                 file.outputStream().use { output ->
@@ -34,10 +35,11 @@ class EventsRepository(private val client: SupabaseClientInstance) {
             }
 
             val bucket = client.client.storage["event-images"]
-            val filePath = "${System.currentTimeMillis()}.jpg"
 
             bucket.upload(
-                path = filePath,
+
+
+                path = filename,
                 data = file.readBytes(),
                 options = {
                     upsert = true
@@ -45,12 +47,14 @@ class EventsRepository(private val client: SupabaseClientInstance) {
                 }
             )
 
-            val publicUrl = bucket.publicUrl(filePath)
+            val publicUrl = bucket.publicUrl(filename)
+            Log.d("EventsRepository", "Public URL: $publicUrl")
 
             file.delete()
 
             publicUrl
         } catch (e: Exception) {
+            Log.e("EventsRepository", "Error uploading image", e)
             null
         }
     }

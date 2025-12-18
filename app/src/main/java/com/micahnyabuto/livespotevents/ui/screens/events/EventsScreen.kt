@@ -208,11 +208,11 @@ fun EventCard(event: Event) {
                 .weight(1f)
                 .align(Alignment.CenterVertically)
         ) {
-            Text(
-                text = if (event.event_date == "2025-08-15") "Tonight" else "Tomorrow",
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
+//            Text(
+//                text = if (event.event_date == "2025-08-15") "Tonight" else "Tomorrow",
+//                fontSize = 12.sp,
+//                color = MaterialTheme.colorScheme.onSurfaceVariant
+//            )
             Text(
                 text = event.title,
                 fontWeight = FontWeight.Bold,

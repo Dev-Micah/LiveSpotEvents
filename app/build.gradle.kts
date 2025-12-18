@@ -83,6 +83,11 @@ dependencies {
     //Navigation
     implementation("androidx.navigation:navigation-compose:2.9.0")
 
+
+    //Navigation3
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
+
     //coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 
