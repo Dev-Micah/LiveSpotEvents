@@ -112,6 +112,9 @@ dependencies {
     implementation(libs.koin.androidx.compose)
     testImplementation(libs.koin.test)
 
+    //Workermanager
+    implementation("androidx.work:work-runtime-ktx:2.11.1")
+
     //Supabase
     implementation(platform("io.github.jan-tennert.supabase:bom:3.2.2"))
     implementation("io.github.jan-tennert.supabase:auth-kt")
@@ -126,5 +129,6 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
     implementation("io.ktor:ktor-client-logging:$ktor_version")
+
 
 }

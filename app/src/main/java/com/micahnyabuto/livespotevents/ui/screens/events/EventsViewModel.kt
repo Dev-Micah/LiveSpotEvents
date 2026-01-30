@@ -5,14 +5,14 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.micahnyabuto.livespotevents.domain.model.Event
-import com.micahnyabuto.livespotevents.domain.repository.EventsRepository
+import com.micahnyabuto.livespotevents.domain.repository.EventRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class EventsViewModel(private val repository: EventsRepository) : ViewModel() {
+class EventsViewModel(private val repository: EventRepository) : ViewModel() {
 
     private val _uiState = MutableStateFlow(EventsUiState())
     val uiState: StateFlow<EventsUiState> = _uiState.asStateFlow()
@@ -49,11 +49,11 @@ class EventsViewModel(private val repository: EventsRepository) : ViewModel() {
                 val event = Event(
                     id = null,
                     title = title,
-                    event_date = date,
-                    event_time = time,
+                    eventDate = date,
+                    eventTime = time,
                     location = location,
                     description = description,
-                    image_url = imageUrl,
+                    imageUrl = imageUrl,
                 )
                 repository.createEvent(event)
                 loadEvents()

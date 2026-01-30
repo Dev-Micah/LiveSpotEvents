@@ -64,7 +64,7 @@ fun CreateEventScreen(
 ) {
     val context = LocalContext.current
     val uiState by eventsViewModel.uiState.collectAsState()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackBarHostState = remember { SnackbarHostState() }
 
     val eventTitle = remember { mutableStateOf("") }
     val eventDate = remember { mutableStateOf("") }
@@ -86,7 +86,7 @@ fun CreateEventScreen(
 
     LaunchedEffect(uiState) {
         if (uiState.createError != null) {
-            snackbarHostState.showSnackbar(
+            snackBarHostState.showSnackbar(
                 message = uiState.createError!!,
                 actionLabel = "Dismiss"
             )
@@ -119,7 +119,7 @@ fun CreateEventScreen(
     }
 
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = { SnackbarHost(snackBarHostState) },
         topBar = {
             TopAppBar(
                 title = {
