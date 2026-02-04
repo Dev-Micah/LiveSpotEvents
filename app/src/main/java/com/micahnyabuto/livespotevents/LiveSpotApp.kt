@@ -9,7 +9,6 @@ class LiveSpotApp: Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin {
-
             androidContext(this@LiveSpotApp)
             modules(appModule)
         }
